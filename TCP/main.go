@@ -1,8 +1,6 @@
-package tcp
+package main
 
 import (
-	"github.com/palSagnik/blackhat-go"
-	
 	"fmt"
 	"net"
 )
