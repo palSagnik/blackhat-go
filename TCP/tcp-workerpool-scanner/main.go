@@ -10,6 +10,7 @@ var (
 	hostName = "scanme.nmap.org"
 	portStart = 1
 	portEnd = 10240
+	workerCount = 300
 )
 
 // Providing a pool of workers
@@ -27,12 +28,12 @@ func worker(ports chan int, results chan int) {
 	}
 }
 
-func main() {
+func scannerLogic() (res []int) {
 	
-	// size of chan 200 to make it a buffered channel
-	ports := make(chan int, 200)
+	ports := make(chan int, workerCount)
 	results := make(chan int)
-	var openPorts[] int
+
+	var openPorts []int
 
 	for i := 0; i < cap(ports); i++ {
 		go worker(ports, results)
@@ -55,6 +56,13 @@ func main() {
 	}
 	close(ports)
 	close(results)
+
+	return openPorts
+}
+
+func main() {
+	
+	openPorts := scannerLogic()
 
 	sort.Ints(openPorts)
 	fmt.Println("Open Ports")
